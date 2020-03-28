@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="tvheadend"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+
+	<!-- Sample Thing Type -->
+	<thing-type id="tvhserver">
+		<label>TvHeadend Server</label>
+		<description>The TvHeadend server we want to connect to.</description>
+
+		<channels>
+			<channel id="sw_version" typeId="sw_version" />
+		</channels>
+
+<!--		<properties>
+			<property name="vendor">TvHeadend</property>
+		</properties>
+		<representation-property>version</representation-property>
+-->
+		<config-description>
+			<parameter name="ipAddress" type="text">
+				<context>network-address</context>
+				<label>Network Address</label>
+				<description>Network address of the TvHeadend bridge.</description>
+				<required>true</required>
+			</parameter>
+			<parameter name="port" type="integer" required="false" min="1" max="65535">
+				<label>Port</label>
+				<default>9981</default>
+				<description>Port of the TvHeadend bridge.</description>
+			</parameter>
+			<parameter name="username" type="text">
+				<label>Username</label>
+				<description>Name of a registered TvHeadend bridge user, that allows to access the API.</description>
+				<required>false</required>
+			</parameter>
+			<parameter name="password" type="text">
+				<context>password</context>
+				<label>Password</label>
+				<description>Password of a registered TvHeadend bridge user, that allows to access the API.</description>
+				<required>false</required>
+			</parameter>
+			<parameter name="pollingInterval" type="integer" min="1" step="1" unit="s">
+				<label>Polling Interval</label>
+				<description>Seconds between fetching values from the TvHeadend bridge.</description>
+				<required>true</required>
+				<default>10</default>
+			</parameter>
+		</config-description>
+
+	</thing-type>
+
+
+	<channel-type id="sw_version">
+		<item-type>String</item-type>
+		<label>TvHeadend Server Version</label>
+		<description>The software version of the TvHeadend server.</description>
+		<category>Text</category>
+		<state readOnly="true" />
+	</channel-type>
+	<channel-type id="api_version">
+		<item-type>String</item-type>
+		<label>TvHeadend API Version</label>
+		<description>The API version of the TvHeadend server.</description>
+		<category>Text</category>
+		<state readOnly="true" />
+	</channel-type>
+
+</thing:thing-descriptions>

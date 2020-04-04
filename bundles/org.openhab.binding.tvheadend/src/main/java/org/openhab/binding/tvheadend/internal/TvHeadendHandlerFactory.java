@@ -12,13 +12,14 @@
  */
 package org.openhab.binding.tvheadend.internal;
 
-import static org.openhab.binding.tvheadend.internal.TvHeadendBindingConstants.*;
+import static org.openhab.binding.tvheadend.internal.TvHeadendBindingConstants.THING_TYPE_TVHSERVER;
 
 import java.util.Collections;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandlerFactory;
@@ -53,7 +54,7 @@ public class TvHeadendHandlerFactory extends BaseThingHandlerFactory {
         logger.error("create {}!", thing.getLabel());
         if (THING_TYPE_TVHSERVER.equals(thingTypeUID)) {
             logger.error("Return Thing!");
-            return new TvHeadendHandler(thing);
+            return new TvHeadendBridgeHandler((Bridge) thing);
         }
 
         return null;

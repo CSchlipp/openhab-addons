@@ -27,9 +27,11 @@ public class TvHeadendBindingConstants {
     private static final String BINDING_ID = "tvheadend";
 
     // List of all Thing Type UIDs
-    public static final ThingTypeUID THING_TYPE_TVHSERVER = new ThingTypeUID(BINDING_ID, "tvhserver");
+    public static final ThingTypeUID THING_TYPE_TVHSERVER = new ThingTypeUID(BINDING_ID, "bridge");
 
     // List of all Channel ids
     public static final String CHANNEL_SW_VERSION = "sw_version";
     public static final String CHANNEL_API_VERSION = "api_version";
+    public static final String CHANNEL_NAME = "name";
+    public static final String CHANNEL_CAPABILITES = "capabilities";
 }

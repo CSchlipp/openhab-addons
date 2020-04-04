@@ -4,20 +4,18 @@
 	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
 	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
 
-	<!-- Sample Thing Type -->
-	<thing-type id="tvhserver">
-		<label>TvHeadend Server</label>
-		<description>The TvHeadend server we want to connect to.</description>
+	<!-- TvHeadend Bridge -->
+	<bridge-type id="bridge">
+		<label>TvHeadend Bridge</label>
+		<description>The TvHeadend server.</description>
 
 		<channels>
 			<channel id="sw_version" typeId="sw_version" />
+			<channel id="api_version" typeId="api_version" />
+			<channel id="name" typeId="name" />
+			<channel id="capabilities" typeId="capabilities" />
 		</channels>
 
-<!--		<properties>
-			<property name="vendor">TvHeadend</property>
-		</properties>
-		<representation-property>version</representation-property>
--->
 		<config-description>
 			<parameter name="ipAddress" type="text">
 				<context>network-address</context>
@@ -29,16 +27,17 @@
 				<label>Port</label>
 				<default>9981</default>
 				<description>Port of the TvHeadend bridge.</description>
+				<required>false</required>
 			</parameter>
 			<parameter name="username" type="text">
 				<label>Username</label>
-				<description>Name of a registered TvHeadend bridge user, that allows to access the API.</description>
+				<description>Name of a registered TvHeadend user, that allows to access the API.</description>
 				<required>false</required>
 			</parameter>
 			<parameter name="password" type="text">
 				<context>password</context>
 				<label>Password</label>
-				<description>Password of a registered TvHeadend bridge user, that allows to access the API.</description>
+				<description>Password of a registered TvHeadend user, that allows to access the API.</description>
 				<required>false</required>
 			</parameter>
 			<parameter name="pollingInterval" type="integer" min="1" step="1" unit="s">
@@ -48,9 +47,7 @@
 				<default>10</default>
 			</parameter>
 		</config-description>
-
-	</thing-type>
-
+	</bridge-type>
 
 	<channel-type id="sw_version">
 		<item-type>String</item-type>
@@ -63,6 +60,20 @@
 		<item-type>String</item-type>
 		<label>TvHeadend API Version</label>
 		<description>The API version of the TvHeadend server.</description>
+		<category>Text</category>
+		<state readOnly="true" />
+	</channel-type>
+	<channel-type id="name">
+		<item-type>String</item-type>
+		<label>TvHeadend Server Name</label>
+		<description>The name of the TvHeadend server.</description>
+		<category>Text</category>
+		<state readOnly="true" />
+	</channel-type>
+	<channel-type id="capabilities">
+		<item-type>String</item-type>
+		<label>TvHeadend Server Capabilities</label>
+		<description>The capabilities of the TvHeadend server.</description>
 		<category>Text</category>
 		<state readOnly="true" />
 	</channel-type>

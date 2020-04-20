@@ -10,7 +10,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.tvheadend.internal;
+package org.openhab.binding.tvheadend.internal.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -22,4 +22,8 @@ import java.lang.annotation.Target;
 public @interface TvHeadendStateHandler {
 
     public String channelUID();
+
+    public boolean isRegexp() default false;
+
+    public boolean isList() default false;
 }

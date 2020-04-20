@@ -19,7 +19,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.eclipse.smarthome.core.library.types.StringType;
 import org.openhab.binding.tvheadend.internal.TvHeadendBindingConstants;
-import org.openhab.binding.tvheadend.internal.TvHeadendStateHandler;
+import org.openhab.binding.tvheadend.internal.annotation.TvHeadendStateHandler;
 import org.openhab.binding.tvheadend.internal.api.TvHeadendApiEndpoint;
 
 /**
@@ -29,7 +29,7 @@ import org.openhab.binding.tvheadend.internal.api.TvHeadendApiEndpoint;
  */
 public class Serverinfo extends TvHeadendApiEndpoint {
 
-    private static final String endpointUrl = "/api/serverinfo";
+    private static final String ENDPOINT_URL = "/api/serverinfo";
 
     @SerializedName("sw_version")
     @Expose
@@ -48,7 +48,7 @@ public class Serverinfo extends TvHeadendApiEndpoint {
         return swVersion;
     }
 
-    @TvHeadendStateHandler(channelUID = TvHeadendBindingConstants.CHANNEL_SW_VERSION)
+    @TvHeadendStateHandler(channelUID = TvHeadendBindingConstants.CHANNEL_SERVERINFO_SWVERSION)
     public StringType getConvertedSwVersion() {
         return new StringType(swVersion);
     }
@@ -61,7 +61,7 @@ public class Serverinfo extends TvHeadendApiEndpoint {
         return apiVersion;
     }
 
-    @TvHeadendStateHandler(channelUID = TvHeadendBindingConstants.CHANNEL_API_VERSION)
+    @TvHeadendStateHandler(channelUID = TvHeadendBindingConstants.CHANNEL_SERVERINFO_APIVERSION)
     public StringType getConvertedApiVersion() {
         return new StringType((apiVersion != null) ? apiVersion.toString() : "");
     }
@@ -74,7 +74,7 @@ public class Serverinfo extends TvHeadendApiEndpoint {
         return name;
     }
 
-    @TvHeadendStateHandler(channelUID = TvHeadendBindingConstants.CHANNEL_NAME)
+    @TvHeadendStateHandler(channelUID = TvHeadendBindingConstants.CHANNEL_SERVERINFO_NAME)
     public StringType getConvertedName() {
         return new StringType(name);
     }
@@ -87,7 +87,7 @@ public class Serverinfo extends TvHeadendApiEndpoint {
         return capabilities;
     }
 
-    @TvHeadendStateHandler(channelUID = TvHeadendBindingConstants.CHANNEL_CAPABILITES)
+    @TvHeadendStateHandler(channelUID = TvHeadendBindingConstants.CHANNEL_SERVERINFO_CAPABILITES)
     public StringType getConvertedCapabilities() {
         if (capabilities != null && !capabilities.isEmpty()) {
             return new StringType(String.join(", ", capabilities));
@@ -101,7 +101,7 @@ public class Serverinfo extends TvHeadendApiEndpoint {
 
     @Override
     public String getEndpointUrl() {
-        return endpointUrl;
+        return ENDPOINT_URL;
     }
 
 }

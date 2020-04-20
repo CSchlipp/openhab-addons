@@ -13,8 +13,8 @@ import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.types.State;
 import org.openhab.binding.tvheadend.internal.TvHeadendConfiguration;
-import org.openhab.binding.tvheadend.internal.TvHeadendStateHandler;
 import org.openhab.binding.tvheadend.internal.TvHeadendThingHandlerAnnotationInterface;
+import org.openhab.binding.tvheadend.internal.annotation.TvHeadendStateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,10 +93,15 @@ public class TvHeadendApiEndpointHandler<T extends TvHeadendApiEndpoint> {
             throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         Class<?> c = this.getClass();
         for (Method m : c.getDeclaredMethods()) {
-            if (m.isAnnotationPresent(TvHeadendStateHandler.class)
-                    && m.getDeclaredAnnotation(TvHeadendStateHandler.class).channelUID().equals(channel.getId())) {
-                thingHandler.updateStateExternal(m.getDeclaredAnnotation(TvHeadendStateHandler.class).channelUID(),
-                        (State) m.invoke(this, (Object[]) null));
+            if (m.isAnnotationPresent(TvHeadendStateHandler.class)) {
+                TvHeadendStateHandler annotation = m.getDeclaredAnnotation(TvHeadendStateHandler.class);
+                if (annotation.isList() && channel.getId().contains(annotation.channelUID())) {
+                    // check for correct method!
+                    m.invoke(this, thingHandler, channel);
+                } else if (!annotation.isList() && annotation.channelUID().equals(channel.getId())) {
+                    thingHandler.updateStateExternal(annotation.channelUID(),
+                            (State) m.invoke(this, (Object[]) null));
+                }
             } 
         }
     }

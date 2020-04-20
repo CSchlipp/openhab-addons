@@ -30,8 +30,12 @@ public class TvHeadendBindingConstants {
     public static final ThingTypeUID THING_TYPE_TVHSERVER = new ThingTypeUID(BINDING_ID, "bridge");
 
     // List of all Channel ids
-    public static final String CHANNEL_SW_VERSION = "sw_version";
-    public static final String CHANNEL_API_VERSION = "api_version";
-    public static final String CHANNEL_NAME = "name";
-    public static final String CHANNEL_CAPABILITES = "capabilities";
+    //Serverinfo
+    public static final String CHANNEL_SERVERINFO_SWVERSION = "sw_version";
+    public static final String CHANNEL_SERVERINFO_APIVERSION = "api_version";
+    public static final String CHANNEL_SERVERINFO_NAME = "name";
+    public static final String CHANNEL_SERVERINFO_CAPABILITES = "capabilities";
+
+    //DVR
+    public static final String CHANNEL_DVR_AUTOREC = "autorec";
 }

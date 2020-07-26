@@ -14,12 +14,19 @@ package org.openhab.binding.miio.internal;
 
 import static org.openhab.binding.miio.internal.MiIoBindingConstants.*;
 
+import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.smarthome.core.common.ThreadPoolManager;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandlerFactory;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory;
 import org.openhab.binding.miio.internal.basic.MiIoDatabaseWatchService;
+import org.openhab.binding.miio.internal.cloud.CloudConnector;
 import org.openhab.binding.miio.internal.handler.MiIoBasicHandler;
 import org.openhab.binding.miio.internal.handler.MiIoGenericHandler;
 import org.openhab.binding.miio.internal.handler.MiIoUnsupportedHandler;
@@ -35,13 +42,28 @@ import org.osgi.service.component.annotations.Reference;
  * @author Marcel Verpaalen - Initial contribution
  */
 @Component(service = ThingHandlerFactory.class, configurationPid = "binding.miio")
+@NonNullByDefault
 public class MiIoHandlerFactory extends BaseThingHandlerFactory {
+    private static final String THING_HANDLER_THREADPOOL_NAME = "thingHandler";
+    protected final ScheduledExecutorService scheduler = ThreadPoolManager
+            .getScheduledPool(THING_HANDLER_THREADPOOL_NAME);
 
     private MiIoDatabaseWatchService miIoDatabaseWatchService;
+    private CloudConnector cloudConnector;
 
     @Activate
-    public MiIoHandlerFactory(@Reference MiIoDatabaseWatchService miIoDatabaseWatchService) {
+    public MiIoHandlerFactory(@Reference MiIoDatabaseWatchService miIoDatabaseWatchService,
+            @Reference CloudConnector cloudConnector, Map<String, Object> properties) {
         this.miIoDatabaseWatchService = miIoDatabaseWatchService;
+        this.cloudConnector = cloudConnector;
+        @Nullable
+        String username = (String) properties.get("username");
+        @Nullable
+        String password = (String) properties.get("password");
+        @Nullable
+        String country = (String) properties.get("country");
+        cloudConnector.setCredentials(username, password, country);
+        scheduler.submit(() -> cloudConnector.isConnected());
     }
 
     @Override
@@ -50,7 +72,7 @@ public class MiIoHandlerFactory extends BaseThingHandlerFactory {
     }
 
     @Override
-    protected ThingHandler createHandler(Thing thing) {
+    protected @Nullable ThingHandler createHandler(Thing thing) {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
         if (thingTypeUID.equals(THING_TYPE_MIIO)) {
             return new MiIoGenericHandler(thing, miIoDatabaseWatchService);
@@ -59,7 +81,7 @@ public class MiIoHandlerFactory extends BaseThingHandlerFactory {
             return new MiIoBasicHandler(thing, miIoDatabaseWatchService);
         }
         if (thingTypeUID.equals(THING_TYPE_VACUUM)) {
-            return new MiIoVacuumHandler(thing, miIoDatabaseWatchService);
+            return new MiIoVacuumHandler(thing, miIoDatabaseWatchService, cloudConnector);
         }
         return new MiIoUnsupportedHandler(thing, miIoDatabaseWatchService);
     }
